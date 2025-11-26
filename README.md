@@ -29,7 +29,7 @@ Whether you are a solo developer looking to add a narrative intro or a studio ai
 
 ### Step 1: Get the plugin
 Download and install the plugin from the Roblox Marketplace:
-👉 **[LINK TO THE PLUGIN PAGE HERE]** 👈 %% TODO %%
+👉 **[GET THE PLUGIN HERE](https://create.roblox.com/store/asset/135812529565935/CinematicMaker)** 👈
 
 ### Step 2: Initialize the system in your game
 For cinematics to work in-game, the plugin needs to install its "engine" (the camera controller).
