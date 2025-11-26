@@ -101,7 +101,7 @@ How to use Issues?
 
 - ❓ Ask a Question: If you are stuck or don't understand how to do something, feel free to open an Issue with the question tag.
 
-👉 [Open an Issue](link) %% TODO %%
+👉 [Open an Issue](https://github.com/Alienduck/CinematicMakerPublic/issues)
 
 📄 License
 
