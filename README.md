@@ -1,108 +1,181 @@
-# Cinematic Maker - Roblox Studio Plugin
+# Cinematic Maker - Official Documentation
 
 [![Roblox Plugin](https://img.shields.io/badge/Ro%20blox-Plugin-000000.svg?style=for-the-badge&logo=roblox&colorB=3399ff)](https://create.roblox.com/store/asset/135812529565935/CinematicMaker)
 [![Version](https://img.shields.io/badge/Version-1.0.0-green.svg?style=for-the-badge)]()
 
-**[Cinematic Maker Logo©![Cinematic Maker Logo](https://github.com/Alienduck/CinematicMakerPublic/blob/main/cinematicMakerBgLess.png?raw=true)]**
+![Cinematic Maker Logo](https://github.com/Alienduck/CinematicMakerPublic/blob/main/cinematicMakerBgLess.png?raw=true)
 
 > **Note:** This repository does not contain the plugin's source code. It serves as a central hub for documentation, bug reporting, feature requests, and community support.
 
-## 📖 About
+Welcome to the documentation for the **Cinematic Maker** plugin for Roblox Studio. This document details the structure of plans, shot configuration, the use of effects, and the general workflow within the editor.
 
-**Cinematic Maker** is a powerful and intuitive Roblox Studio plugin designed to radically simplify the creation of cutscenes, complex camera movements, and dynamic shots in your games.
-
-Whether you are a solo developer looking to add a narrative intro or a studio aiming to create epic trailers, Cinematic Maker allows you to visually compose your camera shots without writing a single line of complex camera code.
-
-### ✨ Key Features
-
-* **📸 Intuitive Visual Editor:** Position your camera in Studio, set the duration and transitions, and capture the "Shot" with a single click.
-* **🎞️ Timeline System:** Easily visualize, reorder, delete, or modify your existing shots using the "Edit" mode.
-* **🚀 Smooth Transitions:** Precisely control transition time, Easing Style (Quad, Bounce, Elastic...), and Easing Direction (In, Out, InOut) for every movement.
-* **✨ Dynamic Effects:** Easily add special effects to your shots (the system is designed to be extensible).
-* **▶️ Instant Preview:** Test your cinematic directly within the editor before exporting.
-* **💾 Clean Export:** The plugin generates structured, ready-to-use `ModuleScripts`, neatly stored in `ReplicatedStorage`.
-* **📦 Automatic Installation:** A single button click installs the necessary modules required for the system to run in your game.
+## Table of Contents
+1. [Cinematic Structure](#cinematic-structure)
+    - [The Plan](#the-plan)
+    - [The Camera Shot](#the-camera-shot)
+2. [Effects and Transitions System](#effects-and-transitions-system)
+    - [Effect Transitions](#effect-transitions)
+    - [List of Available Effects](#list-of-available-effects)
+3. [Using the Editor (Plugin)](#using-the-editor-plugin)
+    - [Standard Workflow](#standard-workflow)
+    - [Shot Editing Mode](#shot-editing-mode)
+    - [Project Management (Import/Export)](#project-management-importexport)
 
 ---
 
-## 🛠️ Installation and Setup
+<h2 id="cinematic-structure"> Cinematic Structure </h2>
 
-### Step 1: Get the plugin
-Download and install the plugin from the Roblox Marketplace:
-👉 **[GET THE PLUGIN HERE](https://create.roblox.com/store/asset/135812529565935/CinematicMaker)** 👈
+### The Plan
 
-### Step 2: Initialize the system in your game
-For cinematics to work in-game, the plugin needs to install its "engine" (the camera controller).
+A **Plan** is the main object of a cinematic. It is an ordered sequence composed of multiple [Shots](#the-camera-shot).
 
-1.  Open Roblox Studio.
-2.  Open the **"Plugins"** tab and click on the **Cinematic Maker** icon to open the interface.
-3.  In the plugin interface, scroll down to the bottom to the **PROJECT** section.
-4.  Click on the **"📥 INSTALL SYSTEM"** button.
-    * *This will create a `Packages` folder and a `CinematicController` module in your `ReplicatedStorage`. Do not delete them!*
+The plugin generates a `ModuleScript` for each saved plan. To play a cinematic in-game, you simply need to require this module and call its `:Play()` method.
 
----
-
-## 🎬 Quick Start Guide: Your First Cinematic
-
-Creating a cinematic takes just a few simple steps:
-
-### 1. Create Shots
-1.  Open the plugin widget.
-2.  In the Studio 3D view, move your camera to the desired starting position.
-3.  In the **EDITOR** section of the plugin, adjust settings like:
-    * `Duration (sec)`: Time the camera stays at this position once it arrives.
-    * `Transition Time (sec)`: Time taken to travel from the previous position to this one.
-    * `Easing Style/Direction`: The style of the movement curve.
-4.  Click **"📸 ADD SHOT"**.
-5.  Move your camera again to the next position, adjust settings if needed, and click "ADD SHOT" again. Repeat to build your sequence.
-
-### 2. Preview and Edit
-* Click **"▶️ PREVIEW"** to see the result.
-* To modify a shot, click on it in the **TIMELINE**. Adjust values in the editor, then click **"💾 UPDATE SHOT"**.
-
-### 3. Save
-1.  In the **PROJECT** section, give your cinematic a name in the "Plan Name" field (e.g., `GameIntro`).
-2.  Click **"💾 SAVE TO MODULE"**.
-3.  Your cinematic is saved in `ReplicatedStorage > Cinematics > GameIntro`.
-
----
-
-## 💻 Using Cinematics in Your Scripts
-
-Once your module is saved, playing it is very simple. You can trigger it from a `LocalScript` (e.g., when a player joins or touches a part).
-
-Here is a typical code example:
-
+**Script Usage Example:**
 ```lua
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Plan = require(Path.To.Plan)
 
--- 1. Wait for the cinematics folder to load
-local CinematicsFolder = ReplicatedStorage:WaitForChild("Cinematics")
-
--- 2. Load your specific cinematic module (replace 'GameIntro' with your plan name)
-local MyCinematicPlan = require(CinematicsFolder:WaitForChild("GameIntro"))
-
--- 3. Play the cinematic!
-MyCinematicPlan:Play()
-
--- Note: The system automatically handles loading the controller.
--- Just ensure you have run "INSTALL SYSTEM" via the plugin at least once.
+-- 3. Play the plan at the desired moment (e.g., trigger, event)
+Plan:Play()
 ```
 
-## 🆘 Support and Community
+### The Camera Shot
 
-This repository is the official place to get help and discuss the plugin.
+A **Shot** represents a static camera viewpoint at a specific moment in your cinematic. Each shot defines the camera's position and how it should move towards that point.
 
-How to use Issues?
+| **Parameter**        | **Type**   | **Description**                                                                                                                       |
+| -------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| **Duration**         | `number`   | The duration (in seconds) the camera will remain static at this shot's position once arrived.                                         |
+| **Transition Time**  | `number`   | The duration (in seconds) the camera will take to travel from the _previous_ shot's position to this one.                             |
+| **Easing Style**     | `Dropdown` | The interpolation curve style of the movement (e.g., Linear, Quad, Bounce...). Defines the "feel" of the movement.                    |
+| **Easing Direction** | `Dropdown` | The direction of the interpolation (In, Out, InOut). Defines whether acceleration/deceleration occurs at the beginning, end, or both. |
+## Effects and Transitions System
 
-- 🐛 Report a Bug: If something isn't working as expected, open an Issue with the bug tag. Try to provide clear steps to reproduce the problem and, if possible, screenshots or videos.
+Each shot can be assigned **a single active visual effect**.
 
-- 💡 Suggest a Feature: Have an idea to make the plugin even better? Open an Issue with the enhancement tag. Describe your idea and why it would be useful.
+### Effect Transitions
 
-- ❓ Ask a Question: If you are stuck or don't understand how to do something, feel free to open an Issue with the question tag.
+Some effects (like Zoom, Blur, etc.) have an internal transition system. This allows animating the appearance and disappearance of the effect, instead of an abrupt change.
 
-👉 [Open an Issue](https://github.com/Alienduck/CinematicMakerPublic/issues)
+> ℹ️ **Note:** Check the **"Transition"** box in an effect's parameters to reveal these options.
 
-📄 License
+|**Transition Parameter**|**Type**|**Default**|**Description**|
+|---|---|---|---|
+|**TransitionIn**|`boolean`|`true`|If checked, the effect will animate in at the beginning of the shot (appearance).|
+|**TransitionOut**|`boolean`|`true`|If checked, the effect will animate towards its default value at the end of the shot (disappearance).|
+|**TransitionStartTime**|`number`|`1.0`|Duration of the animated entry (In).|
+|**TransitionEndTime**|`number`|`1.0`|Duration of the animated exit (Out).|
+|**EasingStyle**|`Dropdown`|`Sine`|The animation curve style for the effect's transitions.|
+|**EasingDirection**|`Dropdown`|`InOut`|The direction of the animation curve.|
+### List of Available Effects
 
-© Lucid Games Studio - All rights reserved. Use of this plugin is subject to the Roblox Marketplace Terms of Use. The code generated by the plugin within your games belongs to you.
+Here are the currently supported effects:
+
+#### `NULL`
+
+No active effect on this shot.
+
+#### `ZOOM`
+
+Modifies the camera's Field of View (FOV).
+
+- **FieldOfView** (`number`, default: 70): The target FOV value. Lower than 70 for a close-up (zoom in), higher than 70 for a wide angle (zoom out).
+    
+- _Supports transitions._
+    
+
+#### `BLUR`
+
+Applies a Gaussian blur to the screen.
+
+- **Size** (`number`, default: 10): The intensity of the blur.
+    
+- _Supports transitions._
+    
+
+#### `LETTER_BOXING`
+
+Adds cinematic black bars at the top and bottom of the screen.
+
+- **Ratio** (`number`, default: 0.1): The relative height of the bars (between 0 and 1).
+    
+- **Color** (`Color3`, default: Black): The color of the bars.
+    
+- **Transparency** (`number`, default: 0): The transparency of the bars.
+    
+- _Supports transitions._
+    
+
+#### `COLOR_GRADING`
+
+Applies color correction to the image.
+
+- **TintColor** (`Color3`, default: White): Applies a global tint. White is neutral.
+    
+- **Brightness** (`number`, default: 0): Global brightness, from -1 (complete black) to 1 (complete white).
+    
+- **Contrast** (`number`, default: 0): Contrast intensity, from -1 to 1.
+    
+- **Saturation** (`number`, default: 0): Color intensity, from -1 (black and white) to 1 (very vivid colors).
+    
+
+#### `CAMERA_SHAKE`
+
+Applies procedural shaking to the camera.
+
+- **Preset** (`Dropdown`, default: 'Bump'): Selects the type of shake from a predefined list (e.g., Bump, Explosion, Earthquake, BadTrip...).
+    
+
+---
+
+## Using the Editor (Plugin)
+
+The plugin interface is divided into two main states: creation and modification.
+
+### Standard Workflow (Creation Mode)
+
+In this mode, you capture new viewpoints.
+
+1. Position your Studio camera at the desired location.
+    
+2. Configure the shot parameters (Duration, Transition, Effect) in the side panel.
+    
+3. Use the action buttons:
+    
+    - **📸 Add Shot:** Captures the current camera position and adds the shot with the chosen parameters to the end of the timeline.
+        
+    - **▶️ Preview:** Plays the complete cinematic in the Studio window to visualize the result.
+        
+
+### Shot Editing Mode
+
+To modify an existing shot, **simply click on the shot in the timeline**. The editor switches to modification mode, and the panel fills with that shot's parameters.
+
+The action buttons change:
+
+- **❌ Cancel Edit:** Cancels current changes and returns to standard creation mode.
+    
+- **📍 Teleport To Shot:** **Very useful.** Instantly repositions your Studio camera to the exact position where this shot was captured. This allows for reframing without having to redo everything.
+    
+- **💾 Update Shot:** Validates changes and updates the selected shot.
+    
+    > ⚠️ **Warning:** This button also captures your camera's **current** position. If you only want to modify parameters (duration, effect...) without changing the position, ensure you have clicked **Teleport To Shot** before updating.
+    
+
+### Project Management (Import/Export)
+
+This section at the bottom of the plugin allows managing your cinematic files.
+
+- **📥 Install System (Critical):**
+    
+    - Installs the necessary modules and dependencies into `ReplicatedStorage` for cinematics to work in-game.
+        
+    - **Must be done at least once per project.** To update the system, delete the existing `Packages` folder and `CinematicController` module in `ReplicatedStorage`, then click this button again.
+        
+- **💾 Save To Module:**
+    
+    - Exports the current timeline into a `ModuleScript`. Don't forget to give your plan an explicit name in the text field above before saving.
+        
+- **📂 Import Selected:**
+    
+    - Allows reloading an existing cinematic to modify it. Simply select a plan's `ModuleScript` in the explorer, then click this button to load all its shots into the timeline.
