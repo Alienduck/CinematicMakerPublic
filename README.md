@@ -3,7 +3,7 @@
 [![Roblox Plugin](https://img.shields.io/badge/Ro%20blox-Plugin-000000.svg?style=for-the-badge&logo=roblox&colorB=3399ff)](https://create.roblox.com/store/asset/135812529565935/CinematicMaker)
 [![Version](https://img.shields.io/badge/Version-1.0.0-green.svg?style=for-the-badge)]()
 
-![Cinematic Maker Logo](https://github.com/Alienduck/CinematicMakerPublic/blob/main/cinematicMakerBgLess.png?raw=true)
+![Cinematic Maker Logo](https://github.com/Alienduck/CinematicMakerPublic/blob/main/Logo_Plugin_Cinematic.png?raw=true)
 
 > **Note:** This repository does not contain the plugin's source code. It serves as a central hub for documentation, bug reporting, feature requests, and community support.
 
